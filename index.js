@@ -1,15 +1,19 @@
-//  canvas
+/* eslint-disable linebreak-style */
+/* eslint-disable import/extensions */
+/* eslint-disable no-alert */
+
+// import classes
+import Ball from './js/ball.js';
+import Brick from './js/bricks.js';
+import Paddle from './js/paddle.js';
+// canvas
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-// import classes
-import Ball from "./js/ball.js"
-import Brick from "./js/bricks.js";
-import Paddle from "./js/paddle.js"
 // create bricks
-const bricksColumnCount=5
-const bricksRowCount=3
-const bricks=[]
-function createBricks(){
+const bricksColumnCount = 5;
+const bricksRowCount = 3;
+const bricks = [];
+function createBricks() {
   for (let c = 0; c < bricksColumnCount; c += 1) {
     bricks[c] = [];
     for (let r = 0; r < bricksRowCount; r += 1) {
@@ -17,7 +21,7 @@ function createBricks(){
     }
   }
 }
-createBricks()
+createBricks();
 // custom background
 function createGradiant() {
   // skyGrad
@@ -41,15 +45,18 @@ function drawBG() {
   drawCloud(100, 60);
   drawCloud(300, 100);
 }
+// vars
+let lives = 3;
+let score = 0;
 // draw functions
-const infoColor="red"
-const ball=new Ball(canvas.width / 2, canvas.height -30, 10, "red")
-function drawBall(){
-  ball.render(ctx)
+const infoColor = 'red';
+const ball = new Ball(canvas.width / 2, canvas.height - 30, 10, 'red');
+function drawBall() {
+  ball.render(ctx);
 }
-const paddle=new Paddle((canvas.width - 75) /2, 75, 10, "red", 7, canvas)
-function drawPaddle(){
-  paddle.render(ctx)
+const paddle = new Paddle((canvas.width - 75) / 2, 75, 10, 'red', 7, canvas);
+function drawPaddle() {
+  paddle.render(ctx);
 }
 function drawLives() {
   ctx.font = '16px Arial';
@@ -74,20 +81,18 @@ function drawBricks() {
     }
   }
 }
-function drawElements(){
-  drawBall()
-  drawPaddle()
-  drawLives()
-  drawScore()
-  drawBricks()
+function drawElements() {
+  drawBall();
+  drawPaddle();
+  drawLives();
+  drawScore();
+  drawBricks();
 }
-function moveElements(){
-  ball.move()
-  paddle.move()
+function moveElements() {
+  ball.move();
+  paddle.move();
 }
 // assisters
-let lives = 3;
-let score= 0;
 function wallsCollison() {
   // walls, misses, subtracts lives
   if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
@@ -139,16 +144,16 @@ function mouseMoveHandler(e) {
 }
 function keyDownHandler(e) {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
-    paddle.keyPressed="right"
+    paddle.keyPressed = 'right';
   } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-    paddle.keyPressed="left"
+    paddle.keyPressed = 'left';
   }
 }
 function keyUpHandler(e) {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
-    paddle.keyPressed="none"
+    paddle.keyPressed = 'none';
   } else if (e.key === 'Left' || e.key === 'ArrowLeft') {
-    paddle.keyPressed="none"
+    paddle.keyPressed = 'none';
   }
 }
 // event handlers
@@ -162,9 +167,9 @@ function draw() {
   drawElements();
   collisionDetection();
   wallsCollison();
-  moveElements()
+  moveElements();
   requestAnimationFrame(draw);
 }
 draw();
 // export classes
-export default canvas
+export default canvas;
