@@ -5,11 +5,7 @@ const ctx = canvas.getContext('2d');
 import Ball from "./js/ball.js"
 import Brick from "./js/bricks.js";
 import Paddle from "./js/paddle.js"
-// draw functions
-const infoColor="red"
-const bricksPadding=10
-const bricksOffsetTop=30
-const bricksOffsetSide=30
+// create bricks
 const bricksColumnCount=5
 const bricksRowCount=3
 const bricks=[]
@@ -22,12 +18,36 @@ function createBricks(){
   }
 }
 createBricks()
-console.log(bricks)
+// custom background
+function createGradiant() {
+  // skyGrad
+  const grd = ctx.createLinearGradient(0, 0, 0, 320);
+  grd.addColorStop(0, 'cornflowerblue');
+  grd.addColorStop(1, 'white');
+
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, 480, 320);
+}
+function drawCloud(xposition, yposition) {
+  // cloud
+  ctx.beginPath();
+  ctx.arc(xposition, yposition, 30, 0, Math.PI * 2);
+  ctx.arc(xposition + 30, yposition, 25, 0, Math.PI * 2);
+  ctx.fillStyle = 'white';
+  ctx.fill();
+}
+function drawBG() {
+  createGradiant();
+  drawCloud(100, 60);
+  drawCloud(300, 100);
+}
+// draw functions
+const infoColor="red"
 const ball=new Ball(canvas.width / 2, canvas.height -30, 10, "red")
 function drawBall(){
   ball.render(ctx)
 }
-const paddle=new Paddle((canvas.width - 75) /2, 75, 10, "red", 7)
+const paddle=new Paddle((canvas.width - 75) /2, 75, 10, "red", 7, canvas)
 function drawPaddle(){
   paddle.render(ctx)
 }
@@ -138,7 +158,7 @@ document.addEventListener('keyup', keyUpHandler, false);
 // main run
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // drawBG();
+  drawBG();
   drawElements();
   collisionDetection();
   wallsCollison();
@@ -146,6 +166,5 @@ function draw() {
   requestAnimationFrame(draw);
 }
 draw();
-
 // export classes
 export default canvas
