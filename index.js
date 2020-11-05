@@ -3,10 +3,26 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 // import classes
 import Ball from "./js/ball.js"
-// import Brick from "./js/bricks.js"
+import Brick from "./js/bricks.js";
 import Paddle from "./js/paddle.js"
 // draw functions
 const infoColor="red"
+const bricksPadding=10
+const bricksOffsetTop=30
+const bricksOffsetSide=30
+const bricksColumnCount=5
+const bricksRowCount=3
+const bricks=[]
+function createBricks(){
+  for (let c = 0; c < bricksColumnCount; c += 1) {
+    bricks[c] = [];
+    for (let r = 0; r < bricksRowCount; r += 1) {
+      bricks[c][r] = new Brick(c, r);
+    }
+  }
+}
+createBricks()
+console.log(bricks)
 const ball=new Ball(canvas.width / 2, canvas.height -30, 10, "red")
 function drawBall(){
   ball.render(ctx)
@@ -25,11 +41,25 @@ function drawScore() {
   ctx.fillStyle = infoColor;
   ctx.fillText(`Score: ${score}`, 8, 20);
 }
+function drawBricks() {
+  for (let c = 0; c < bricksColumnCount; c += 1) {
+    for (let r = 0; r < bricksRowCount; r += 1) {
+      if (bricks[c][r].status === 1) {
+        ctx.beginPath();
+        ctx.rect(bricks[c][r].x, bricks[c][r].y, bricks[c][r].width, bricks[c][r].height);
+        ctx.fillStyle = infoColor;
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+  }
+}
 function drawElements(){
   drawBall()
   drawPaddle()
   drawLives()
   drawScore()
+  drawBricks()
 }
 function moveElements(){
   ball.move()
@@ -63,6 +93,24 @@ function wallsCollison() {
     }
   }
 }
+function collisionDetection() {
+  for (let c = 0; c < bricksColumnCount; c += 1) {
+    for (let r = 0; r < bricksRowCount; r += 1) {
+      const b = bricks[c][r];
+      if (b.status === 1) {
+        if (ball.x > b.x && ball.x < b.x + b.width && ball.y > b.y && ball.y < b.y + b.height) {
+          ball.dy = -ball.dy;
+          b.status = 0;
+          score += 1;
+          if (score === bricksRowCount * bricksColumnCount) {
+            alert('YOU WIN, CONGRATULATIONS!');
+            document.location.reload();
+          }
+        }
+      }
+    }
+  }
+}
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
@@ -92,10 +140,8 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // drawBG();
   drawElements();
-  // collisionDetection();
-  // drawLives();
+  collisionDetection();
   wallsCollison();
-  // paddleMove();
   moveElements()
   requestAnimationFrame(draw);
 }
