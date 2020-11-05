@@ -6,18 +6,20 @@ class Paddle{
         this.height=height
         this.color=color
         this.dx=dx
+        this.keyPressed="none"
     }
-    move(direction){
-        if(direction==="left"){
+    move(){
+        if(this.keyPressed==="left"){
             this.x-=this.dx
-        } else{
+        } else if(this.keyPressed==="right"){
             this.x+=this.dx
         }
     }
     render(ctx){
         ctx.beginPath();
-        ctx.rect(this.x, canvas.height - this.height, this.width, this.height);
-        ctx.fillStyle = color;
+        //320 with canvas.height (how to pass in canvas?)
+        ctx.rect(this.x, 320 - this.height, this.width, this.height);
+        ctx.fillStyle = this.color;
         ctx.fill();
         ctx.closePath();
     }
